@@ -1,11 +1,13 @@
 interface ITimeObj {
-    id: number
+    id?: number
     start: number
-    end: number
+    end?: number
     title: String
 }
+
 type TimeTracksState = {
     tracks: ITimeObj[]
+    current: ITimeObj
 }
 type TimeAction ={
     type: string

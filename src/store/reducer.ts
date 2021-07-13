@@ -14,7 +14,13 @@ const initialState: TimeTracksState = {
             start: 0,
             end: 0,
         }
-    ]
+    ],
+    current: {
+      id: 0,
+      title: "",
+      start: 0,
+      end: 0,
+    }
 }
 
 const reducer = (
@@ -23,8 +29,9 @@ const reducer = (
   ): TimeTracksState => {
     switch (action.type) {
       case actionTypes.ADD_TIMETRACK:
+        let t: any = state.tracks[state.tracks.length - 1]
         const newTimeObj: ITimeObj = {
-          id: state.tracks[state.tracks.length - 1].id + 1, 
+          id: t && t.id? t.id + 1: 1, 
           title: action.track.title,
           start: action.track.start,
           end: action.track.end,
@@ -34,12 +41,17 @@ const reducer = (
           tracks: state.tracks.concat(newTimeObj),
         }
       case actionTypes.REMOVE_TIMETRACK:
-        const updatedArticles: ITimeObj[] = state.tracks.filter(
+        const updatedTracks: ITimeObj[] = state.tracks.filter(
           track => track.id !== action.track.id
         )
         return {
           ...state,
-          tracks: updatedArticles,
+          tracks: updatedTracks,
+        }
+      case actionTypes.SAVE_TIMETRACK:
+        return {
+          ...state,
+          current: action.track,
         }
     }
     return state
