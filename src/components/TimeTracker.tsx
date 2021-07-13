@@ -46,7 +46,7 @@ export const TimeTracker: React.FunctionComponent<Props> = (props) => {
     
     if (isActive) {
       setTimer(setInterval(() => {
-        setTime((time) => time + 10);
+        setTime(() => Date.now() - timeObj.start);
       }, 10))
     } else {
       clearInterval(timer);
