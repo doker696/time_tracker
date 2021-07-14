@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 
 import { addTimeTrack, removeTimeTrack, saveTimeTrack } from "./store/actionCreators";
-import { TimeTrackHistory } from "./components/TimeTrackHistory";
+import { HistoryAccordion } from "./components/HistoryAccordion";
 import { TimeTracker } from "./components/TimeTracker";
-import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { Button, Container, createStyles, makeStyles, Theme } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,7 +39,7 @@ function App() {
   const currentTimeTrack: ITimeObj = useSelector(
     (state: TimeTracksState) => state.current
   );
-
+    
   const dispatch: Dispatch<any> = useDispatch();
 
   const _addTimeTrack = React.useCallback(
@@ -54,6 +54,10 @@ function App() {
     (timeTrack: ITimeObj) => dispatch(removeTimeTrack(timeTrack)),
     [dispatch]
   );
+  const playAgain = React.useCallback(
+    (timeTrack: ITimeObj) => dispatch(saveTimeTrack({...timeTrack,end: 0,start:Date.now(),isRepeat: true})),
+    [dispatch]);
+  
 
   return (
     <div className={classes.root}>
@@ -62,9 +66,10 @@ function App() {
           <TimeTracker _save={_addTimeTrack} _current={currentTimeTrack} _currentSave={saveCurrentTimeTrack} />
         </div>
         <div className={classes.history}>
-          <TimeTrackHistory
+          <HistoryAccordion
             _timeTracks={timeTracks}
             _delete={deleteTimeTrack}
+            _play={playAgain}
           />
         </div>
       </Container>

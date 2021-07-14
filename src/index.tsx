@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import App from "./App";
 import reducer from "./store/reducer";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 function saveToLocalStorage(state: TimeTracksState) {
   try {
@@ -24,10 +25,14 @@ function loadFromLocalStorage() {
     return undefined;
   }
 }
-
+const composeEnhancers = composeWithDevTools({ trace: true });
 const store: Store<TimeTracksState, TimeAction> & {
   dispatch: DispatchType;
-} = createStore(reducer, loadFromLocalStorage(), applyMiddleware(thunk));
+} = createStore(
+  reducer,
+  loadFromLocalStorage(),
+  composeEnhancers(applyMiddleware(thunk))
+);
 store.subscribe(() => saveToLocalStorage(store.getState()));
 
 const rootElement = document.getElementById("root");

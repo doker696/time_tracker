@@ -3,6 +3,7 @@ interface ITimeObj {
     start: number
     end?: number
     title: String
+    isRepeat?: Boolean
 }
 
 type TimeTracksState = {
