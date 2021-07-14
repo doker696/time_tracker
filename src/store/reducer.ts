@@ -5,15 +5,21 @@ const initialState: TimeTracksState = {
         {
             id: 1,
             title: "track 1",
-            start: 0,
-            end: 0,
+            start: 1606180688448,
+            end: 1606180788448, 
         },
         {
             id: 2,
             title: "track 2",
-            start: 0,
-            end: 0,
-        }
+            start: 1626080688448,
+            end: 1626080788448,  
+        },
+        {
+            id: 3,
+            title: "track 3",
+            start: 1626180488448,
+            end: 1626180687448
+        },
     ],
     current: {
       id: 0,
