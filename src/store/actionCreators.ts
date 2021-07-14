@@ -22,3 +22,14 @@ export function removeTimeTrack(track: ITimeObj) {
         }, 100)
     }
 }
+export function saveTimeTrack(track: ITimeObj) {
+    const action: TimeAction = {
+        type: actionTypes.SAVE_TIMETRACK,
+        track,
+    }
+    return (dispatch: DispatchType) => {
+        setTimeout(() => {
+          dispatch(action)
+        }, 100)
+    }
+}
