@@ -34,40 +34,54 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const TimeTracker: React.FunctionComponent<Props> = (props) => {
   const classes = useStyles();
-
   const [timeObj, setTimeObj] = useState<ITimeObj>(props._current);
+
   const [isActive, setIsActive] = useState(!!props._current.start);
-  const [time, setTime] = useState(timeObj.start !== 0? Date.now() - timeObj.start : 0);
-  const [timer, setTimer] = useState<any>(0)
+  const [time, setTime] = useState(
+    timeObj.start !== 0 ? Date.now() - timeObj.start : 0
+  );
+  const [timer, setTimer] = useState<any>(0);
 
   React.useEffect(() => {
-    
-    console.log("isActive: ",isActive);
-    
+    if (props._current.start && props._current.isRepeat) {
+      if (isActive) {
+        props._save({ ...timeObj, end: Date.now() });
+        clearInterval(timer);
+        setTimer(
+          setInterval(() => {
+            setTime(() => Date.now() - props._current.start);
+          }, 10)
+        );
+      } else {
+        setIsActive(true);
+      }
+      setTimeObj(props._current);
+    }
+  }, [props._current]);
+
+  React.useEffect(() => {
     if (isActive) {
-      setTimer(setInterval(() => {
-        setTime(() => Date.now() - timeObj.start);
-      }, 10))
+      setTimer(
+        setInterval(() => {
+          setTime(() => Date.now() - timeObj.start);
+        }, 10)
+      );
+      props._currentSave(timeObj);
     } else {
       clearInterval(timer);
+
+      if (timeObj.end) {
+        props._save(timeObj);
+        setTimeObj({ title: "", id: 0, start: 0, end: 0 });
+        props._currentSave({ title: "", id: 0, start: 0, end: 0 });
+      }
     }
-    // return () => {
-    //   clearInterval(interval);
-    // };
   }, [isActive]);
 
-  React.useEffect(() => {
-    if (timeObj.end !== 0) {
-      props._save(timeObj);
-
-      setTimeObj({ title: "", id: 0, start: 0, end: 0 });
-    } else {
-      props._currentSave(timeObj);
-    }
-  }, [timeObj, props]);
-
   const handleStart = () => {
-    setTimeObj({ ...timeObj, start: Date.now() });
+    console.log("start");
+
+    setTimeObj({ ...timeObj, start: Date.now(), isRepeat: false });
     setIsActive(true);
   };
 
